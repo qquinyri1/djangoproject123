@@ -1,0 +1,54 @@
+{% extends "quotes_app/base.html" %} {% load tags_extractor %} {% block content %}
+
+<div class="row">
+    <div class="col-md-8">
+        {% if tag %}
+        <h3>Viewing tag: <a href="/tag/{{ tag }}">{{ tag }}</a></h3>
+        {% endif %}
+        {% for quote in page_obj %}
+        <div class="quote" itemscope itemtype="http://schema.org/CreativeWork">
+            <span class="text" itemprop="text">“{{ quote.quote }}”</span>
+            <span>by <small class="author" itemprop="author">{{ quote.author.fullname}}</small>
+        <a href="/author/{{ quote.author.fullname }}">(about)</a>
+        </span>
+            <div class="tags">
+                Tags:
+                <meta class="keywords" itemprop="keywords" content="{{ quote.tags | tags }}"/>
+                {% for tag in quote.tags.all %}
+                <a class="tag" href="/tag/{{ tag.name }}">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <nav>
+            <ul class="pager">
+                {% if page_obj.has_previous %}
+                <li class="previous">
+                    <a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">&larr;</span> Previous</a>
+                </li>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                <li class="next">
+                    <a href="?page={{ page_obj.next_page_number }}">Next <span aria-hidden="true">&rarr;</span></a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+    </div>
+    <div class="col-md-4 tags-box">
+
+        <h2>Top Ten tags</h2>
+        {% for tag in top_tags %}
+        <span class="tag-item">
+            <a class="tag" style="font-size: {% cycle '28' '26' '26' '24' '22' '14' '10' '8' '8' '6' %}px" href="/tag/{{ tag.name }}">{{ tag.name }}</a>
+            </span>
+        {% endfor %}
+
+
+
+    </div>
+</div>
+{% endblock %}
