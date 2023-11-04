@@ -11,13 +11,13 @@ class Settings(BaseSettings):
     email_use_tls: bool
     email_host_user: str
     email_host_password: str
-    default_from_email: str
     db_engine: str
     db_name: str
     db_user: str
     db_password: str
     db_host: str
     db_port: str
+    secret_key: str
 
     model_config = ConfigDict(
         env_file=".env",
